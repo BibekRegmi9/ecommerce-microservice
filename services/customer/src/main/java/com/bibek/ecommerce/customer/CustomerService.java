@@ -42,7 +42,7 @@ public class CustomerService {
     }
 
     public List<CustomerResponse> findAllCustomers() {
-        return  this.repository.findAll()
+        return this.repository.findAll()
                 .stream()
                 .map(this.mapper::fromCustomer)
                 .collect(Collectors.toList());
