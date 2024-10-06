@@ -13,6 +13,8 @@ import org.bibek.order.repository.OrderRepository;
 import org.bibek.order.service.OrderService;
 import org.bibek.orderline.OrderLineRequest;
 import org.bibek.orderline.service.OrderLineService;
+import org.bibek.payment.PaymentClient;
+import org.bibek.payment.PaymentRequest;
 import org.bibek.product.ProductClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductClient productClient;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final PaymentClient paymentClient;
 
     @Transactional
     @Override
@@ -53,7 +56,15 @@ public class OrderServiceImpl implements OrderService {
             ));
         });
 
-        // todo payment process
+        // payment process
+        var paymentRequest = new PaymentRequest(
+                orderRequest.amount(),
+                orderRequest.paymentMethod(),
+                order.getId(),
+                order.getReference(),
+                customer
+        );
+        paymentClient.requestOrderPayment(paymentRequest);
 
         // order notification using kafka
         orderProducer.sendOrderConfirmation(
