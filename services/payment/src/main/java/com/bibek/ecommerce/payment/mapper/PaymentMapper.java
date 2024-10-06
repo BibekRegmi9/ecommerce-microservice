@@ -1,0 +1,21 @@
+package com.bibek.ecommerce.payment.mapper;
+
+import com.bibek.ecommerce.payment.Payment;
+import com.bibek.ecommerce.payment.PaymentRequest;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PaymentMapper {
+
+    public Payment toPayment(PaymentRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return Payment.builder()
+                .id(request.id())
+                .paymentMethod(request.paymentMethod())
+                .amount(request.amount())
+                .orderId(request.orderId())
+                .build();
+    }
+}
