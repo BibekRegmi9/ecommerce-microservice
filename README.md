@@ -1,93 +1,170 @@
-# spring-microservice-ecommerce
+# eCommerce Microservices Project
 
+This project demonstrates a basic eCommerce system built using a microservices architecture in Java Spring Boot. The system includes services for customer management, orders, payments, and notifications, and showcases several advanced features like service discovery, API gateways, asynchronous messaging, and distributed tracing.
 
+## Project Structure
 
-## Getting started
+The project consists of the following microservices:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+1. **Customer Service**: Handles customer data.
+2. **Order Service**: Manages orders placed by customers.
+3. **Payment Service**: Processes payments for orders.
+4. **Notification Service**: Sends notifications (via email) when certain events occur (e.g., order placement).
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Table of Contents
+1. [Prerequisites](#prerequisites)
+2. [Microservices Setup](#microservices-setup)
+   - [Customer Service](#customer-service)
+   - [Order Service](#order-service)
+   - [Payment Service](#payment-service)
+   - [Notification Service](#notification-service)
+3. [Microservices Communication](#microservices-communication)
+4. [Service Discovery with Eureka](#service-discovery-with-eureka)
+5. [API Gateway](#api-gateway)
+6. [Asynchronous Communication with RabbitMQ](#asynchronous-communication-with-rabbitmq)
+7. [Distributed Tracing](#distributed-tracing)
+8. [Additional Architecture Details](#additional-architecture-details)
 
-## Add your files
+---
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Prerequisites
+- Java 17+
+- Docker
+- Docker Compose
+- Maven
+- RabbitMQ
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/vivekregmi83/spring-microservice-ecommerce.git
-git branch -M main
-git push -uf origin main
-```
+---
 
-## Integrate with your tools
+## Microservices Setup
 
-- [ ] [Set up project integrations](https://gitlab.com/vivekregmi83/spring-microservice-ecommerce/-/settings/integrations)
+### 1. Customer Service
+- A microservice responsible for managing customer data.
+- Exposes REST APIs for adding, updating, and querying customer information.
+  
+#### Key Technologies:
+- Spring Boot
+- Spring Data JPA (for persistence)
+- Postgres and mongodb(as the database)
 
-## Collaborate with your team
+### 2. Order Service
+- Manages customer orders and keeps track of their status.
+  
+#### Key Technologies:
+- Spring Boot
+- Spring Data JPA
+- MySQL
+- RabbitMQ (for event-driven communication)
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+### 3. Payment Service
+- Handles payment processing for orders.
+  
+#### Key Technologies:
+- Spring Boot
+- Spring Data JPA
+- RabbitMQ
 
-## Test and Deploy
+### 4. Notification Service
+- Sends email notifications when an order is placed.
 
-Use the built-in continuous integration in GitLab.
+#### Key Technologies:
+- Spring Boot
+- JavaMail
+- RabbitMQ
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+---
 
-***
+## Microservices Communication
 
-# Editing this README
+### 1. REST Communication via HTTP
+- **RestTemplate** and **OpenFeign** are used for synchronous inter-service communication.
+  
+### 2. Comparing RestTemplate and OpenFeign:
+- **RestTemplate**: Simple to use for synchronous HTTP calls but requires manual configuration.
+- **OpenFeign**: More declarative and integrates seamlessly with Eureka and Ribbon for load balancing.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### 3. Testing Communication:
+- RestTemplate and OpenFeign communication between Customer, Order, and Payment services can be tested using Postman or integration tests.
 
-## Suggestions for a good README
+---
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Service Discovery with Eureka
+- **Eureka Server** is used for service discovery, allowing microservices to register themselves at runtime.
+- **Discovery-Service**: Created using Spring Cloud Netflix Eureka.
+  
+### Key Steps:
+- Externalize configurations using Spring Cloud Config.
+- Register Customer, Order, Payment, and Notification services with Eureka.
 
-## Name
-Choose a self-explaining name for your project.
+---
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## API Gateway
+- **Spring Cloud Gateway** is used as the API Gateway.
+- Routes all external requests to the respective microservices and applies security, rate-limiting, and routing logic.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Asynchronous Communication with RabbitMQ
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### 1. Setup RabbitMQ:
+- Docker-compose is used to set up RabbitMQ.
+- RabbitMQ enables asynchronous communication between services (e.g., Order and Notification services).
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### 2. Concepts:
+- **Queue**: A place where messages are stored.
+- **Exchange Types**: Direct, Topic, Fanout, and Headers.
+  
+### 3. Order Placement Workflow:
+- Once an order is placed, a message is published to the **order-queue**.
+- **Notification Service** consumes this message and sends an email confirmation to the customer.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+---
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## Notification Service & JavaMail
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### 1. Email Notifications:
+- **MailDev** is used in Docker to simulate email sending.
+- **JavaMail** is used in the Notification Service to send order confirmation emails.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+### 2. Message Consumption:
+- The Notification Service consumes messages from the **order-queue** in RabbitMQ and sends the corresponding emails.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### 3. Persistence:
+- Notification details are saved to a database for future reference.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+---
 
-## License
-For open source projects, say how it is licensed.
+## Distributed Tracing
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+### 1. Sleuth and Zipkin:
+- **Spring Cloud Sleuth** is used to trace requests as they propagate through different microservices.
+- **Zipkin** is used to visualize the trace data.
+
+### 2. Zipkin Setup:
+- A **Zipkin container** is added via Docker Compose.
+- The Zipkin dashboard provides insights into the performance of each service.
+
+---
+
+## Additional Architecture Details
+
+### Service Registry and Discovery (/)
+- Eureka is used for service discovery.
+
+### API Gateway (/)
+- Zuul or Spring Cloud Gateway is used for routing requests to the appropriate microservices.
+
+### CQRS (Command Query Responsibility Segregation) (/)
+- Command and Query operations are separated in the Order Service.
+
+### Database per Service (/)
+- Each microservice has its own dedicated database (e.g., MySQL).
+
+### Event-Driven Architecture (RabbitMQ) (/)
+- RabbitMQ is used to facilitate event-driven communication between services.
+
+### Saga Pattern (x)
+- **Not implemented**: For managing distributed transactions across services.
+
+### Circuit Breaker (x)
+- **Not implemented**: For handling failures in microservices gracefully.
