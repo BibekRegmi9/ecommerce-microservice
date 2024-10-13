@@ -11,7 +11,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface PaymentClient {
 
     @PostMapping
-    Long requestOrderPayment(@RequestBody PaymentRequest request){
-
-    }
+    Long requestOrderPayment(@RequestBody PaymentRequest request);
 }
