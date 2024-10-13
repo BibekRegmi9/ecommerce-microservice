@@ -1,13 +1,12 @@
 spring:
   datasource:
-    hikari:
-      url: jdbc:postgresql://localhost:5434/payment
-      username: postgres
-      password: postgres
-      driver-class-name: org.postgresql.Driver
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5434/payment
+    username: postgres
+    password: postgres
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
@@ -19,5 +18,8 @@ spring:
       properties:
         spring.json.type.mapping: paymentConfirmation:com.bibek.ecommerce.payment.notification
 
+  application:
+    config:
+      product-url: http://localhost:8222/api/v1/products
 server:
   port: 8060
