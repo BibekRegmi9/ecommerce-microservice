@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
         //fetch customer details from customer service
         var customer = this.customerClient.findCustomerById(orderRequest.customerId())
-                .orElseThrow(() -> new BusinessException("Cannot create order, Custome don't exist"));
+                .orElseThrow(() -> new BusinessException("Cannot create order, Customer don't exist"));
 
         var purchasedProduct = this.productClient.purchaseProducts(orderRequest.products());
 
