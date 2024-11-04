@@ -1,16 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-registry
+  name: discovery-service
 spec:
   selector:
     matchLabels:
-      app: service-registry
+      app: discovery-service
   template:
     metadata:
       labels:
-        app: service-registry
+        app: discovery-service
     spec:
       containers:
-        - name: service-registry
-          image:
+        - name: discovery-service
+          image: lmcq345/discovery-service:0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8761
