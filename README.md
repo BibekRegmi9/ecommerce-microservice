@@ -32,7 +32,7 @@ The project consists of the following microservices:
 - Docker
 - Docker Compose
 - Maven
-- RabbitMQ
+- Kafka
 
 ---
 
@@ -53,8 +53,8 @@ The project consists of the following microservices:
 #### Key Technologies:
 - Spring Boot
 - Spring Data JPA
-- MySQL
-- RabbitMQ (for event-driven communication)
+- PostgreSQL
+- Kafka (for event-driven communication)
 
 ### 3. Payment Service
 - Handles payment processing for orders.
@@ -62,7 +62,7 @@ The project consists of the following microservices:
 #### Key Technologies:
 - Spring Boot
 - Spring Data JPA
-- RabbitMQ
+- Kafka
 
 ### 4. Notification Service
 - Sends email notifications when an order is placed.
@@ -70,7 +70,7 @@ The project consists of the following microservices:
 #### Key Technologies:
 - Spring Boot
 - JavaMail
-- RabbitMQ
+- Kafka
 
 ---
 
@@ -108,7 +108,7 @@ The project consists of the following microservices:
 
 ### 1. Setup RabbitMQ:
 - Docker-compose is used to set up RabbitMQ.
-- RabbitMQ enables asynchronous communication between services (e.g., Order and Notification services).
+- Kafka enables asynchronous communication between services (e.g., Order and Notification services).
 
 ### 2. Concepts:
 - **Queue**: A place where messages are stored.
@@ -127,7 +127,7 @@ The project consists of the following microservices:
 - **JavaMail** is used in the Notification Service to send order confirmation emails.
 
 ### 2. Message Consumption:
-- The Notification Service consumes messages from the **order-queue** in RabbitMQ and sends the corresponding emails.
+- The Notification Service consumes messages from the **order-queue** in Kafka and sends the corresponding emails.
 
 ### 3. Persistence:
 - Notification details are saved to a database for future reference.
@@ -158,10 +158,10 @@ The project consists of the following microservices:
 - Command and Query operations are separated in the Order Service.
 
 ### Database per Service (/)
-- Each microservice has its own dedicated database (e.g., MySQL).
+- Each microservice has its own dedicated PostgreSQL database.
 
 ### Event-Driven Architecture (RabbitMQ) (/)
-- RabbitMQ is used to facilitate event-driven communication between services.
+- Kafka is used to facilitate event-driven communication between services.
 
 ### Saga Pattern (x)
 - **Not implemented**: For managing distributed transactions across services.
